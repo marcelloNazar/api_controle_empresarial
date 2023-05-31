@@ -9,10 +9,4 @@ public class CategoriaDTO {
     private String cor;
     private String icone;
 
-    public CategoriaDTO(Categoria categoria) {
-        this.id = categoria.getId();
-        this.nome = categoria.getNome();
-        this.cor = categoria.getCor();
-        this.icone = categoria.getIcone();
-    }
 }

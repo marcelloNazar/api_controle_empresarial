@@ -11,7 +11,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/transacoes")
@@ -31,44 +35,49 @@ public class TransacaoController {
     @Autowired
     private CategoriaService categoriaService;
 
+    @PostMapping
+    public ResponseEntity<Transacao> createTransacao(@Valid @RequestBody TransacaoDTO transacaoInput) {
+        return ResponseEntity.status(CREATED).body(transacaoService.createTransacao(transacaoInput));
+    }
+
     @GetMapping
-    public ResponseEntity<Page<Transacao>> getAllTransacoes(Pageable pageable) {
-        return ResponseEntity.ok().body(transacaoService.getAllTransacoes(pageable));
+    public ResponseEntity<Page<Transacao>> getAllTransacoes(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "data") String sort) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).descending());
+        return ResponseEntity.ok(transacaoService.getAllTransacoes(pageable));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Transacao> getTransacaoById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(transacaoService.getTransacaoById(id));
-    }
-
-    @PostMapping
-    public ResponseEntity<Transacao> createTransacao(@Valid @RequestBody TransacaoDTO transacaoInput) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(transacaoService.createTransacao(transacaoInput));
+        return ResponseEntity.ok(transacaoService.getTransacaoById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Transacao> updateTransacao(@PathVariable Long id, @Valid @RequestBody TransacaoDTO transacaoInput) {
-        return ResponseEntity.ok().body(transacaoService.updateTransacao(id, transacaoInput));
+        return ResponseEntity.ok(transacaoService.updateTransacao(id, transacaoInput));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransacao(@PathVariable Long id) {
         transacaoService.deleteTransacao(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/categoria")
     public ResponseEntity<List<Categoria>> getAllCategorias() {
-        return ResponseEntity.ok().body(categoriaService.getAllCategorias());
+        return ResponseEntity.ok(categoriaService.getAllCategorias());
     }
 
     @GetMapping("/categoria/{id}")
     public ResponseEntity<Categoria> getCategoriaById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(categoriaService.getCategoriaById(id));
+        return ResponseEntity.ok(categoriaService.getCategoriaById(id));
     }
+
     @GetMapping("/categoria/{categoriaId}")
     public ResponseEntity<List<Transacao>> getTransacoesByCategoria(@PathVariable Long categoriaId) {
-        return ResponseEntity.ok().body(transacaoService.getTransacoesByCategoria(categoriaId));
+        return ResponseEntity.ok(transacaoService.getTransacoesByCategoria(categoriaId));
     }
 
     @ControllerAdvice

@@ -23,45 +23,10 @@ import java.util.Optional;
 public class TransacaoService {
     @Autowired
     private TransacaoRepository transacaoRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private CategoriaRepository categoriaRepository;
-
-    @Transactional
-    public Page<Transacao> getAllTransacoes(Pageable pageable) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("data").descending());
-        Page<Transacao> transacoes = transacaoRepository.findByUser(user, pageRequest);
-        transacoes.getContent().forEach(t -> t.getCategoria().getNome()); // Força a inicialização de Categoria
-        return transacoes;
-    }
-
-    @Transactional
-    public Transacao getTransacaoById(Long id) {
-        Optional<Transacao> transacaoOpt = transacaoRepository.findById(id);
-        if (transacaoOpt.isPresent()) {
-            Transacao transacao = transacaoOpt.get();
-            transacao.getCategoria().getNome(); // Força a inicialização de Categoria
-            return transacao;
-        } else {
-            throw new EntityNotFoundException("Transação não encontrada com o id " + id);
-        }
-    }
-
-    public List<Transacao> getTransacoesByCategoria(Long categoriaId) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
-        Categoria categoria = categoriaRepository.findById(categoriaId)
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada: " + categoriaId));
-        return transacaoRepository.findByUserAndCategoria(user, categoria);
-    }
-
 
     public Transacao createTransacao(TransacaoDTO transacaoDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -101,8 +66,37 @@ public class TransacaoService {
         return transacaoRepository.save(transacao);
     }
 
+    public Page<Transacao> getAllTransacoes(Pageable pageable) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
+        Page<Transacao> transacoes = transacaoRepository.findByUser(user, pageable);
+        transacoes.getContent().forEach(t -> t.getCategoria().getNome()); // Força a inicialização de Categoria
+        return transacoes;
+    }
+
+    public Transacao getTransacaoById(Long id) {
+        Optional<Transacao> transacaoOpt = transacaoRepository.findById(id);
+        if (transacaoOpt.isPresent()) {
+            Transacao transacao = transacaoOpt.get();
+            transacao.getCategoria().getNome(); // Força a inicialização de Categoria
+            return transacao;
+        } else {
+            throw new EntityNotFoundException("Transação não encontrada com o id " + id);
+        }
+    }
+
     public void deleteTransacao(Long id) {
         Transacao transacao = getTransacaoById(id);
         transacaoRepository.delete(transacao);
+    }
+
+    public List<Transacao> getTransacoesByCategoria(Long categoriaId) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
+        Categoria categoria = categoriaRepository.findById(categoriaId)
+                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada: " + categoriaId));
+        return transacaoRepository.findByUserAndCategoria(user, categoria);
     }
 }

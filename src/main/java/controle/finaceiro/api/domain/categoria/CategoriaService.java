@@ -12,33 +12,33 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    public List<Categoria> getAllCategorias() {
-        return categoriaRepository.findAll();
-    }
-
-    public Categoria getCategoriaById(Long id) {
-        Optional<Categoria> categoria = categoriaRepository.findById(id);
-        if (categoria.isPresent()) {
-            return categoria.get();
-        } else {
-            throw new EntityNotFoundException("Categoria não encontrada com o id " + id);
-        }
-    }
-
     public Categoria createCategoria(Categoria categoria) {
         return categoriaRepository.save(categoria);
     }
 
     public Categoria updateCategoria(Long id, Categoria categoriaDetails) {
         Categoria categoria = getCategoriaById(id);
-        categoria.setNome(categoriaDetails.getNome());
-        categoria.setCor(categoriaDetails.getCor());
-        categoria.setIcone(categoriaDetails.getIcone());
+        if (categoriaDetails.getNome() != null) {
+            categoria.setNome(categoriaDetails.getNome());
+        }
+        if (categoriaDetails.getCor() != null) {
+            categoria.setCor(categoriaDetails.getCor());
+        }
+        if (categoriaDetails.getIcone() != null) {
+            categoria.setIcone(categoriaDetails.getIcone());
+        }
         return categoriaRepository.save(categoria);
     }
 
+    public List<Categoria> getAllCategorias() {
+        return categoriaRepository.findAll();
+    }
+
+    public Categoria getCategoriaById(Long id) {
+        return categoriaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
+    }
+
     public void deleteCategoria(Long id) {
-        Categoria categoria = getCategoriaById(id);
-        categoriaRepository.delete(categoria);
+        categoriaRepository.delete(getCategoriaById(id));
     }
 }
