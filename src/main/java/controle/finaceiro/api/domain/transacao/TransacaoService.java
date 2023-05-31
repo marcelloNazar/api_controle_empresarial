@@ -7,6 +7,7 @@ import controle.finaceiro.api.user.User;
 import controle.finaceiro.api.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,11 +39,8 @@ public class TransacaoService {
         Transacao transacao = new Transacao();
         transacao.setUser(user);
         transacao.setCategoria(categoria);
-        transacao.setValor(transacaoDto.getValor());
-        transacao.setTipo(transacaoDto.getTipo());
-        transacao.setData(transacaoDto.getData());
-        transacao.setDescricao(transacaoDto.getDescricao());
-        transacao.setPaga(transacaoDto.getPago());
+
+        BeanUtils.copyProperties(transacaoDto, transacao, "categoriaId");
 
         return transacaoRepository.save(transacao);
     }
@@ -60,7 +58,6 @@ public class TransacaoService {
         Categoria categoria = categoriaRepository.findById(transacaoDetails.getCategoriaId())
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada: " + transacaoDetails.getCategoriaId()));
 
-        // Copie os valores de transacaoDetails para transacao aqui...
         transacao.setCategoria(categoria);
 
         return transacaoRepository.save(transacao);
