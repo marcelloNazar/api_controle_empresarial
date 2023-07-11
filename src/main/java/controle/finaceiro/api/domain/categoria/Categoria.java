@@ -31,4 +31,6 @@ public class Categoria {
     private List<Transacao> transacoes;
 
 
+
+
 }

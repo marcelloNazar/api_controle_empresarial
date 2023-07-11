@@ -72,6 +72,10 @@ public class TransacaoService {
         return transacoes;
     }
 
+    public Page<Transacao> getAllTransacoesAdmin(Pageable pageable) {
+        return transacaoRepository.findAll(pageable);
+    }
+
     public Transacao getTransacaoById(Long id) {
         Optional<Transacao> transacaoOpt = transacaoRepository.findById(id);
         if (transacaoOpt.isPresent()) {
@@ -84,8 +88,7 @@ public class TransacaoService {
     }
 
     public void deleteTransacao(Long id) {
-        Transacao transacao = getTransacaoById(id);
-        transacaoRepository.delete(transacao);
+        transacaoRepository.delete(getTransacaoById(id));
     }
 
     public List<Transacao> getTransacoesByCategoria(Long categoriaId) {

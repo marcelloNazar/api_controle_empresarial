@@ -18,15 +18,17 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse register(RegisterRequest request) {
-        var user = User.builder()
+        User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .build();
+
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return  AuthResponse.builder()
                 .token(jwtToken)
+                .role(user.getRole())
                 .build();
     }
 
@@ -42,6 +44,7 @@ public class AuthService {
         var jwtToken = jwtService.generateToken(user);
         return  AuthResponse.builder()
                 .token(jwtToken)
+                .role(user.getRole())
                 .build();
     }
 }

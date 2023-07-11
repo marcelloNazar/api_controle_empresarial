@@ -13,10 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static controle.finaceiro.api.user.Permission.*;
-import static controle.finaceiro.api.user.Role.ADMIN;
-import static controle.finaceiro.api.user.Role.USER;
-import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -37,6 +33,7 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest()
                 .authenticated()
+                .and().cors()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

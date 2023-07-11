@@ -1,6 +1,9 @@
 package controle.finaceiro.api.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import controle.finaceiro.api.domain.tarefa.Task;
 import controle.finaceiro.api.domain.transacao.Transacao;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,13 +11,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
@@ -27,6 +27,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
+
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -36,8 +38,12 @@ public class User implements UserDetails {
     @JsonBackReference
     private List<Transacao> transacoes;
 
+    @OneToMany(mappedBy = "assignedTo")
+    @JsonBackReference
+    private List<Task> tasks;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();
     }

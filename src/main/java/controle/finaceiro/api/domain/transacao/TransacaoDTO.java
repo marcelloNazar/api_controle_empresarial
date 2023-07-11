@@ -6,8 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class TransacaoDTO {
-    private Long id;
-    private String tipo; // despesa ou receita
+    private String tipo;
     private Double valor;
     private LocalDate data;
     private String descricao;
