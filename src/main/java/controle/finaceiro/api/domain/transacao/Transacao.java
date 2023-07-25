@@ -24,12 +24,9 @@ public class Transacao {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private Double valor;
-    private String tipo;  // pode ser "ENTRADA" ou "SAIDA"
-
+    private Boolean despesa;
     private LocalDate data;
-
     private String descricao;
-
     private Boolean paga;
     @ManyToOne
     @JoinColumn(name="categoria_id", nullable=false)
