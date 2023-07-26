@@ -25,7 +25,7 @@ public class Transacao {
     private Long id;
     private Double valor;
     private Boolean despesa;
-    private LocalDate data;
+    private String data;
     private String descricao;
     private Boolean paga;
     @ManyToOne

@@ -8,7 +8,6 @@ import java.time.LocalDate;
 public class TransacaoDTO {
     private String tipo;
     private Double valor;
-    private LocalDate data;
     private String descricao;
     private Boolean pago;
     private Long categoriaId;

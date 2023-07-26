@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,7 @@ public class TransacaoService {
         Transacao transacao = new Transacao();
         transacao.setUser(user);
         transacao.setCategoria(categoria);
+        transacao.setData(LocalDate.now().toString());
 
         BeanUtils.copyProperties(transacaoDto, transacao, "categoriaId");
 

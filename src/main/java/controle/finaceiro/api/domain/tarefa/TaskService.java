@@ -1,7 +1,5 @@
 package controle.finaceiro.api.domain.tarefa;
 
-import controle.finaceiro.api.domain.categoria.Categoria;
-import controle.finaceiro.api.domain.transacao.Transacao;
 import controle.finaceiro.api.service.UnauthorizedException;
 import controle.finaceiro.api.user.User;
 import controle.finaceiro.api.user.UserRepository;

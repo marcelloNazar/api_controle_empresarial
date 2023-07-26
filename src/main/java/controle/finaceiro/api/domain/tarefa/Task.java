@@ -28,7 +28,7 @@ public class Task {
 
     private Boolean feito;
 
-    private LocalDate data;
+    private String data;
 
     @ManyToOne
     @JoinColumn(name="created_by_id", nullable=false)

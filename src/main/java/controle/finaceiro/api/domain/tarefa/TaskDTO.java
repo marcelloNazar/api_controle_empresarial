@@ -11,6 +11,6 @@ public class TaskDTO {
     private String descricao;
     private Boolean feito;
     private Long assignedToId;
-    private LocalDate data;
+    private String data;
 
 }
