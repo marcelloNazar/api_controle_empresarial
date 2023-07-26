@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class TransacaoDTO {
-    private Boolean tipo;
+    private Boolean despesa;
     private Double valor;
     private String descricao;
     private Boolean pago;
