@@ -40,12 +40,12 @@ public class AdminController {
 
 
     @PostMapping("/categoria")
-    public ResponseEntity<Categoria> createCategoria(@Valid @RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> createCategoria( @RequestBody Categoria categoria) {
         return ResponseEntity.status(CREATED).body(categoriaService.createCategoria(categoria));
     }
 
     @PutMapping("/categoria/{id}")
-    public ResponseEntity<Categoria> updateCategoria(@PathVariable Long id, @Valid @RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> updateCategoria(@PathVariable Long id, @RequestBody Categoria categoria) {
         return ResponseEntity.ok(categoriaService.updateCategoria(id, categoria));
     }
 
@@ -56,7 +56,7 @@ public class AdminController {
     }
 
     @PostMapping("/tarefa")
-    public ResponseEntity<Task> createTask(@Valid @RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<Task> createTask( @RequestBody TaskDTO taskDTO) {
         return ResponseEntity.status(CREATED).body(taskService.createTask(taskDTO));
     }
 

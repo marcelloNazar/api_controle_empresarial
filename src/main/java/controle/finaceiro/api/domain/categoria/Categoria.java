@@ -23,7 +23,6 @@ public class Categoria {
     private Long id;
     private String nome;
     private String cor;
-    private String icone;
 
     @OneToMany(mappedBy = "categoria")
     @JsonIgnore

@@ -36,7 +36,7 @@ public class UserController {
     private TaskService taskService;
 
     @PostMapping("/transacao")
-    public ResponseEntity<Transacao> createTransacao(@Valid @RequestBody TransacaoDTO transacaoInput) {
+    public ResponseEntity<Transacao> createTransacao(@RequestBody TransacaoDTO transacaoInput) {
         return ResponseEntity.status(CREATED).body(transacaoService.createTransacao(transacaoInput));
     }
 
@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @PutMapping("/transacao/{id}")
-    public ResponseEntity<Transacao> updateTransacao(@PathVariable Long id, @Valid @RequestBody TransacaoDTO transacaoInput) {
+    public ResponseEntity<Transacao> updateTransacao(@PathVariable Long id, @RequestBody TransacaoDTO transacaoInput) {
         return ResponseEntity.ok(transacaoService.updateTransacao(id, transacaoInput));
     }
 
@@ -90,7 +90,7 @@ public class UserController {
     }
 
     @PutMapping("/tarefa/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @Valid @RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
         return ResponseEntity.ok(taskService.updateTask(id, taskDTO));
     }
 }

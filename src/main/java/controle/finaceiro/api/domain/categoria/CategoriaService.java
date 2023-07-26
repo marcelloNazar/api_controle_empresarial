@@ -24,9 +24,6 @@ public class CategoriaService {
         if (categoriaDetails.getCor() != null) {
             categoria.setCor(categoriaDetails.getCor());
         }
-        if (categoriaDetails.getIcone() != null) {
-            categoria.setIcone(categoriaDetails.getIcone());
-        }
         return categoriaRepository.save(categoria);
     }
 
