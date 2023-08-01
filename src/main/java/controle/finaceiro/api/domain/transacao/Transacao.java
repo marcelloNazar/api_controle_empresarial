@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -23,7 +24,7 @@ public class Transacao {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-    private Double valor;
+    private BigDecimal valor;
     private Boolean despesa;
     private String data;
     private String descricao;
