@@ -10,6 +10,6 @@ public class TransacaoDTO {
     private Double valor;
     private String descricao;
     private Boolean pago;
-    private Long categoriaId;
-
+    private String data;
+    private String categoria;
 }

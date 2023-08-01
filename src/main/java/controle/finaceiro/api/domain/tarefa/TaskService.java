@@ -45,7 +45,7 @@ public class TaskService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
-        if (!task.getAssignedTo().equals(user)) {
+        if (task.getAssignedTo().equals(user)) {
             if (taskDetails.getTitulo() != null) {
                 task.setTitulo(taskDetails.getTitulo());
             }

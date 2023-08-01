@@ -34,15 +34,13 @@ public class TransacaoService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
-        Categoria categoria = categoriaRepository.findById(transacaoDto.getCategoriaId())
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada: " + transacaoDto.getCategoriaId()));
 
         Transacao transacao = new Transacao();
         transacao.setUser(user);
-        transacao.setCategoria(categoria);
-        transacao.setData(LocalDate.now().toString());
-
-        BeanUtils.copyProperties(transacaoDto, transacao, "categoriaId");
+        if(transacaoDto.getPago() == null) {
+            transacao.setData(LocalDate.now().toString());
+        }
+        BeanUtils.copyProperties(transacaoDto, transacao);
 
         return transacaoRepository.save(transacao);
     }
@@ -52,15 +50,24 @@ public class TransacaoService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
-
-        if (!transacao.getUser().equals(user)) {
-            throw new UnauthorizedException("O usuário não tem permissão para atualizar esta transação");
+        if (transacaoDetails.getPago()!= null ) {
+            transacao.setPago(transacaoDetails.getPago());
         }
-
-        Categoria categoria = categoriaRepository.findById(transacaoDetails.getCategoriaId())
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada: " + transacaoDetails.getCategoriaId()));
-
-        transacao.setCategoria(categoria);
+        if (transacaoDetails.getCategoria()!= null ) {
+            transacao.setCategoria(transacaoDetails.getCategoria());
+        }
+        if (transacaoDetails.getValor()!= null ) {
+            transacao.setValor(transacaoDetails.getValor());
+        }
+        if (transacaoDetails.getDespesa()!= null ) {
+            transacao.setDespesa(transacaoDetails.getDespesa());
+        }
+        if (transacaoDetails.getData()!= null ) {
+            transacao.setData(transacaoDetails.getData());
+        }
+        if (transacaoDetails.getDescricao()!= null ) {
+            transacao.setDescricao(transacaoDetails.getDescricao());
+        }
 
         return transacaoRepository.save(transacao);
     }
@@ -70,7 +77,6 @@ public class TransacaoService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
         Page<Transacao> transacoes = transacaoRepository.findByUser(user, pageable);
-        transacoes.getContent().forEach(t -> t.getCategoria().getNome()); // Força a inicialização de Categoria
         return transacoes;
     }
 
@@ -82,7 +88,6 @@ public class TransacaoService {
         Optional<Transacao> transacaoOpt = transacaoRepository.findById(id);
         if (transacaoOpt.isPresent()) {
             Transacao transacao = transacaoOpt.get();
-            transacao.getCategoria().getNome(); // Força a inicialização de Categoria
             return transacao;
         } else {
             throw new EntityNotFoundException("Transação não encontrada com o id " + id);

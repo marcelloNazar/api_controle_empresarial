@@ -27,12 +27,8 @@ public class Transacao {
     private Boolean despesa;
     private String data;
     private String descricao;
-    private Boolean paga;
-    @ManyToOne
-    @JoinColumn(name="categoria_id", nullable=false)
-    @JsonManagedReference
-    private Categoria categoria;
-
+    private Boolean pago;
+    private String categoria;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonManagedReference
