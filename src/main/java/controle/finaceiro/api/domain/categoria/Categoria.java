@@ -24,12 +24,4 @@ public class Categoria {
     private String nome;
     private String cor;
 
-    @OneToMany(mappedBy = "categoria")
-    @JsonIgnore
-    @JsonBackReference
-    private List<Transacao> transacoes;
-
-
-
-
 }
